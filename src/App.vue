@@ -1,47 +1,53 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <h1>Todolist</h1>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <div v-if="todolist.length == 0">Vous n'avez aucune taches à faire</div>
 
-  <main>
-    <TheWelcome />
-  </main>
+  <form action="" @submit.prevent="addTask">
+    <input type="text" placeholder="nouvelle tâche" v-model="newTask">
+    <button>Ajouter Une Tâche</button>
+  </form>
+
+  <ul>
+    
+    <li v-for="task in todolist"
+    :key="task">
+        <div>
+          <h2>{{ task.title }} </h2>
+          <button @click.prevent="taskCompleted(task)">[{{ task.completed? '✔' : "\u00A0\u00A0" }}]</button>
+        </div>
+        <h4>{{ task.date.toLocaleString() }}</h4>
+    </li>
+  </ul>
+
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script setup>
+import { ref } from "vue";
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+const todolist = ref([
+])
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+const newTask = ref("")
+
+const addTask = () => {
+  if (!newTask.value.trim()) return
+
+  const task = {
+    date: new Date(),
+    title: newTask.value,
+    completed: false,
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+  todolist.value.push(task)
+  newTask.value = ''
 }
-</style>
+
+const taskCompleted = (task) => {
+  if (task.completed == false)
+    task.completed = true
+  else
+    task.completed = false
+}
+
+</script>
