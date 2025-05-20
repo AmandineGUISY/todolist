@@ -54,10 +54,12 @@ const addTask = () => {
 
   todolist.value.push(task);
   newTask.value = "";
+  sortTask();
 };
 
 const taskCompleted = (task) => {
   task.completed = !task.completed;
+  sortTask();
 };
 
 const hideTask = () => {
@@ -67,6 +69,15 @@ const hideTask = () => {
 const deleteTask = (task) => {
   todolist.value = todolist.value.filter((t) => t !== task);
 };
+
+const sortTask = () => {
+  todolist.value.sort((a, b) => {
+    if (a.completed && !b.completed) return 1;
+    if (!a.completed && b.completed) return -1;
+    return 0;
+  })
+}
+
 </script>
 
 <style>
@@ -178,6 +189,7 @@ input[type="text"] {
 
 .task-title {
   display: flex;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 }
