@@ -1,7 +1,10 @@
 <template>
-  <h1>Todolist</h1>
+  <div>
+    <h1>Todolist</h1>
 
-  <button @click.prevent="hideTask">Masquer les tâches completées</button>
+    <button @click.prevent="hideTask">
+      {{ hide? '🙈' : '👁️' }}</button>
+  </div>
 
   <div v-if="todolist.length == 0">Vous n'avez aucune taches à faire</div>
 
@@ -21,11 +24,13 @@
             <button @click.prevent="taskCompleted(task)">[{{ task.completed? '✔' : "\u00A0\u00A0" }}]</button>
           </div>
           <h4>{{ task.date.toLocaleString() }}</h4>
+          <button @click="deleteTask(task)">[X]</button>
         </div>
     </li>
   </ul>
 
 </template>
+
 
 <script setup>
 import { ref } from "vue";
@@ -51,18 +56,22 @@ const addTask = () => {
 }
 
 const taskCompleted = (task) => {
-  if (task.completed == false)
-    task.completed = true
-  else
-    task.completed = false
+  task.completed = !task.completed
 }
 
 const hideTask = () => {
   hide.value = !hide.value
 }
 
+const sortTask = () => {
+}
+
+const deleteTask = (task) => {
+  todolist.value = todolist.value.filter(t => t !== task)
+}
 
 </script>
+
 
 <style>
   .completed {
